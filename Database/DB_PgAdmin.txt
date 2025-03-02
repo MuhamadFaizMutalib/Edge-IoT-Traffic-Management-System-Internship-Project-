@@ -1,0 +1,73 @@
+CREATE TABLE IF NOT EXISTS users (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    password TEXT NOT NULL,
+    ip_address VARCHAR(15) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS streams (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    analytics_name VARCHAR(100) NOT NULL,
+    rtsp_url TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+CREATE TABLE IF NOT EXISTS mqtt_configs (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL REFERENCES users(id),
+    server VARCHAR(255) NOT NULL,
+    port INTEGER NOT NULL,
+    topic VARCHAR(255) NOT NULL,
+    keep_alive INTEGER NOT NULL
+);
+
+
+
+
+CREATE TABLE IF NOT EXISTS virtual_loop_configs (
+    id SERIAL PRIMARY KEY,
+    stream_id INTEGER REFERENCES streams(id) ON DELETE CASCADE,
+    roi_number INTEGER NOT NULL,
+    x1y1_x FLOAT NOT NULL,
+    x1y1_y FLOAT NOT NULL,
+    x2y2_x FLOAT NOT NULL,
+    x2y2_y FLOAT NOT NULL,
+    x3y3_x FLOAT NOT NULL,
+    x3y3_y FLOAT NOT NULL,
+    x4y4_x FLOAT NOT NULL,
+    x4y4_y FLOAT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+
+
+CREATE TABLE IF NOT EXISTS line_crossing_configs (
+    id SERIAL PRIMARY KEY,
+    stream_id INTEGER REFERENCES streams(id) ON DELETE CASCADE,
+    line_number INTEGER NOT NULL,
+    name VARCHAR(50) DEFAULT NULL,
+    start_x FLOAT NOT NULL,
+    start_y FLOAT NOT NULL,
+    end_x FLOAT NOT NULL,
+    end_y FLOAT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+
+CREATE TABLE IF NOT EXISTS auto_recover_settings (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id),
+    enabled BOOLEAN DEFAULT false,
+    interval_days INTEGER,
+    interval_hours INTEGER,
+    interval_minutes INTEGER,
+    start_time TIMESTAMP WITH TIME ZONE,
+    action_type VARCHAR(20) CHECK (action_type IN ('reboot-node', 'reboot-block', 'reboot-both', 'hw-reset')),
+    last_executed TIMESTAMP WITH TIME ZONE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);

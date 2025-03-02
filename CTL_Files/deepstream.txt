@@ -1,0 +1,15 @@
+[Unit]
+Description=DeepStream Application Service
+After=network.target
+
+[Service]
+ExecStart=/opt/nvidia/deepstream/deepstream-7.0/sources/apps/sample_apps/deepstream-nvdsanalytics-test/deepstream-app -c /opt/nvidia/deepstream/deepstream-7.0/sources/apps/sample_apps/deepstream-nvdsanalytics-test/deepstream_app_config.txt
+WorkingDirectory=/opt/nvidia/deepstream/deepstream-7.0/sources/apps/sample_apps/deepstream-nvdsanalytics-test
+Restart=always
+User=dyna
+Group=dyna
+Environment="PYTHONUNBUFFERED=1"
+
+[Install]
+WantedBy=multi-user.target
+

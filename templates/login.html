@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+    <title>Connect Interface</title>
+
+</head>
+
+<style>
+body {
+    background-image: url('../static/media/imgBG.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+</style>
+<body>
+
+
+    <div class="container">
+        <!-- IP Input Form -->
+        <div class="box" id="ipForm" style="display: none;">
+            <div class="input-field">
+                <label style="display: block; text-align: center; color: #007BFF;">
+                    <h2>Block's IP Address</h2>
+                </label>
+                <input type="text" id="ipInput" placeholder="Enter Block's IP address">
+                <div id="ipError" class="error-message">Please enter a valid IP address</div>
+            </div>
+            
+            <div class="button-group">
+                <button class="connect-btn" onclick="validateAndConnect()">Connect</button>
+
+                <button class="add-btn" onclick="openModal()">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+        </div>
+
+
+    <!-- Login Form -->
+    <form id="loginForm" action="/login" method="POST" style="display: block;">
+        <input type="hidden" name="ip" id="ipHidden">
+        <div class="box">
+            <div class="input-field">
+                <label style="display: block; color: #007BFF;">
+                    <h4><i class="fa-solid fa-user" style="margin-right: 5px;"></i> Username</h4>
+                </label>
+                <input type="text" name="username" id="username" placeholder="Enter Username" required>
+            </div>
+            <div class="input-field">
+                <label style="display: block; color: #007BFF;">
+                    <h4><i class="fa-solid fa-lock" style="margin-right: 5px;"></i> Password</h4>
+                </label>
+                <input type="password" name="password" id="password" placeholder="Enter Password" required>
+            </div>
+            <div class="button-group">
+                <button type="submit" class="login-btn">Login</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+    <!-- Connection Modal -->
+     <form action="{{ url_for('register') }}" method="post">
+    <div id="connectionModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fa-solid fa-video" style="margin-right: 5px;"></i> Setup a connection</h2>
+                <button class="close-btn" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label><h4>Connection string</h4></label>
+                    <!-- <input type="text" id="connectionString" placeholder="Enter Block's IP address"> -->
+                    <input type="text" name="ip" id="connectionString" placeholder="Enter Block's IP address" required>
+                </div>
+                <div class="form-group">
+                    <label><h4><i class="fa-solid fa-user" style="margin-right: 5px;"></i> Username</h4></label>
+                    <!-- <input type="text" id="modalUsername" placeholder="Enter Username"> -->
+                    <input type="text" name="username" id="modalUsername" placeholder="Enter Username" required>
+                </div>
+                <div class="form-group">
+                    <label><h4><i class="fa-solid fa-lock" style="margin-right: 5px;"></i> Password</h4></label>
+                    <!-- <input type="password" id="modalPassword" placeholder="Enter password"> -->
+                    <input type="password" name="password" id="modalPassword" placeholder="Enter Password" required>
+                </div>
+            </div>
+            <button type="submit" class="save-btn">Save connection</button>
+
+
+        </div>
+    </div>
+    </form>
+
+<script src="{{ url_for('static', filename='js/login.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Management</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+  <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/block_settings.css') }}"> -->
+</head>
+<body>
+
+  <div class="sidebar">
+    <div class="logo">
+        <img src="{{ url_for('static', filename='media/Logo.png') }}" alt="DynaTech" style="height: 50px;">
+    </div>
+    <nav>
+        <ul>
+          <li onclick="toggleSourceList()"><i class="fa-solid fa-video"></i> Analytics</li>
+          <li id="source-list" style="display: none;">
+              <ul>
+                  <li onclick="navigateToIndex()"><i class="fa-solid fa-list-ul"></i> Source List</li>
+              </ul>
+          </li>
+            
+            <li onclick="toggleUserSubmenu()"><i class="fa-solid fa-user"></i> User Management</li>
+            <li id="user-submenu" style="display: none;">
+                <ul>
+                    <li onclick="navigateToMyAccount()"><i class="fa-solid fa-cog"></i> My Account</li>
+                </ul>
+            </li>
+            
+            <li><i class="fa-solid fa-bell"></i> Notifications</li>
+            <li onclick="toggleBlockSubmenu()"><i class="fa-solid fa-ban"></i> Block</li>
+            <li id="block-submenu" style="display: none;">
+                <ul>
+                    <li onclick="navigateToSettings()"><i class="fa-solid fa-cog"></i> Settings</li>
+                    <li onclick="navigateToDiagnostics()"><i class="fa-solid fa-braille"></i> Diagnostics</li>
+                    <!-- <li><i class="fa-solid fa-database"></i> Storage</li> -->
+                </ul>
+            </li>
+            <!-- <li><i class="fa-solid fa-pager"></i> Interfaces</li>
+            <li><i class="fa-solid fa-chart-bar"></i> Statistics</li> -->
+            <!-- <li><i class="fa-solid fa-sync-alt"></i> Updates</li> -->
+            <li onclick="logoutUser()"><i class="fa-solid fa-sign-out-alt"></i> Log out</li>
+        </ul>
+    </nav>
+
+    <div class="bottom-section">
+        <div class="version-info">
+            <p>Version 2.9.1</p>
+        </div>
+        <ul>
+            <li class="settings"><i class="fa-solid fa-cog"></i> Settings</li>
+        </ul>
+    </div>
+  </div>
+
+
+
+  
+
+  <div class="main-content">
+    <div class="container">
+      <h2 class="section-title">User Information</h2>
+      <div class="user-info-section">
+        <div class="profile-pic">
+          <img src="../static/media/user.png" alt="User Profile Picture" style="width: 100px; height: 100px; border-radius: 50%;">
+        </div>
+        <div class="info">
+          <p class="text-gray"><i class="fas fa-envelope"></i> E-mail: <span id="email" class="font-medium">user@example.com</span></p>
+          <p class="text-gray"><i class="fas fa-user-shield"></i> Role: <span id="role" class="font-medium">Admin</span></p>
+        </div>
+      </div>
+      
+      <div class="info-section">
+        <h3 class="info-title">Login:</h3>
+        <label for="username" class="label">Username:</label>
+        <input type="text" id="username" class="input-field" disabled>
+        <label for="password" class="label">Password:</label>
+        <input type="password" id="password" class="input-field" disabled>
+    </div>
+      
+      <!-- <div class="info-section">
+        <h3 class="info-title">Access:</h3>
+        <p class="text-gray"><i class="fas fa-key"></i> Token: <span id="accessToken" class="font-medium"></span></p>
+      </div> -->
+      
+      <div class="button-container">
+        <button class="edit-btn">Edit</button>
+        <button class="save-btn">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/MyAccount.js') }}"></script>
+</body>
+</html>

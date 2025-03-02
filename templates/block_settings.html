@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - DynaTech</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/block_settings.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/flatpickr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/flatpickr.min.js"></script>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="logo">
+            <img src="{{ url_for('static', filename='media/Logo.png') }}" alt="DynaTech" style="height: 50px;">
+        </div>
+        <nav>
+            <ul>
+                <li onclick="toggleSourceList()"><i class="fa-solid fa-video"></i> Analytics</li>
+                <li id="source-list" style="display: none;">
+                    <ul>
+                        <li onclick="navigateToIndex()"><i class="fa-solid fa-list-ul"></i> Source List</li>
+                    </ul>
+                </li>
+                
+                <li onclick="toggleUserSubmenu()"><i class="fa-solid fa-user"></i> User Management</li>
+                <li id="user-submenu" style="display: none;">
+                    <ul>
+                        <li onclick="navigateToMyAccount()"><i class="fa-solid fa-cog"></i> My Account</li>
+                    </ul>
+                </li>  
+                
+                <li><i class="fa-solid fa-bell"></i> Notifications</li>
+    
+                <li onclick="toggleBlockSubmenu()"><i class="fa-solid fa-ban"></i> Block</li>
+                    <li id="block-submenu" style="display: none;">
+                        <ul>
+                            <li onclick="navigateToSettings()"><i class="fa-solid fa-cog"></i> Settings</li>
+                            <li onclick="navigateToDiagnostics()"><i class="fa-solid fa-braille"></i> Diagnostics</li>
+                            <!-- <li><i class="fa-solid fa-database"></i> Storage</li> -->
+                        </ul>
+                    </li>
+                <!-- <li><i class="fa-solid fa-pager"></i> Interfaces</li>
+                <li><i class="fa-solid fa-chart-bar"></i> Statistics</li> -->
+                <!-- <li><i class="fa-solid fa-sync-alt"></i> Updates</li> -->
+                <li onclick="logoutUser()"><i class="fa-solid fa-sign-out-alt"></i> Log out</li>
+            </ul>
+        </nav>
+    
+        <!-- Bottom section with Version and Settings -->
+        <div class="bottom-section">
+            <div class="version-info">
+                <p>Version 2.9.1</p>
+            </div>
+            <ul>
+                <li class="settings"><i class="fa-solid fa-cog"></i> Settings</li>
+            </ul>
+        </div>
+    </div>
+
+
+    <div class="main-content">
+        <div class="settings-header">
+            <i class="fa-solid fa-gear"></i>
+            <h1>General</h1>
+        </div>
+
+        <div class="settings-section">
+            <div class="section-header">
+                <h3> <i class="fa-regular fa-clock"></i>  Block settings</h3>
+                <i class="fa-solid fa-chevron-down"></i>
+            </div>
+            <div class="section-content">
+                <div class="input-group">
+                    <label for="block-name">Name:</label>
+                    <input type="text" id="block-name" value="embedded_micro">
+                </div>
+
+                <div class="time-section">
+                    <h3>Time:</h3>
+                    <div class="time-display">
+                        Current FLOW Block time: <span id="current-time">2024-11-11 03:44:20 UTC</span>
+                    </div>
+                    
+                    <div class="toggle-switch">
+                        <input type="checkbox" id="time-adjust" checked>
+                        <label for="time-adjust"></label>
+                        <span>Adjust time automatically</span>
+                    </div>
+
+                    <div class="manual-time">
+                        <h4>Set UTC time manually:</h4>
+                        <div class="input-group">
+                            <label for="date">Date:</label>
+                            <input type="text" id="date" placeholder="yyyy-MM-dd">
+                        </div>
+                        <div class="input-group">
+                            <label for="time">Time:</label>
+                            <input type="text" id="time" placeholder="hh:mm:ss">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button class="save-btn">Save settings</button>
+                </div>
+            </div>
+        </div>
+
+
+
+<!-- Network Section -->
+<!-- <div class="settings-section network-section">
+    <div class="section-header">
+        <h3><i class="fa-solid fa-wifi"></i> Network</h3>
+        <i class="fa-solid fa-chevron-down"></i>
+    </div>
+    <div class="section-content">
+        <div class="status-section">
+            <div class="info-group">
+                <h5><b>Interface</b></h5>
+                <div class="field-row">
+                    <label>Interface:</label>
+                    <select class="info-select">
+                        <option value="eth0">eth0</option>
+                    </select>
+                </div>
+                <div class="field-row">
+                    <label>MAC address:</label>
+                    <span>00:90:0b:d2:28:3f</span>
+                </div>
+                <div class="field-row">
+                    <label>MTU:</label>
+                    <span>1500</span>
+                </div>
+
+
+                <h5 style="margin-top: 20px;"><b>Operational State</b></h5>
+                <div class="field-row">
+                    <label>Enabled:</label>
+                    <div><span class="status-dot enabled"></span> Yes</div>
+                </div>
+                <div class="field-row">
+                    <label>Link:</label>
+                    <div><span class="status-dot connected"></span> Connected</div>
+                </div>
+
+
+                <h5 style="margin-top: 20px;"><b>IPv4</b></h5>
+                <div class="field-row">
+                    <label>Address:</label>
+                    <span>192.168.35.170/24</span>
+                </div>
+                <div class="field-row">
+                    <label>DHCP:</label>
+                    <span>No</span>
+                </div>
+                <div class="field-row">
+                    <label>Scope:</label>
+                    <span>global</span>
+                </div>
+                <div class="field-row">
+                    <label>Remaining life time:</label>
+                    <span>Permanent</span>
+                </div>
+            </div>
+        </div> -->
+
+<!-- IPv4 Configuration with Static Routes -->
+<!-- <div class="ip-section">
+    <h5>IPv4 Configuration</h5>
+    <div class="config-options">
+        <div class="radio-option">
+            <input type="radio" id="ipv4-dhcp" name="ipv4-config" checked>
+            <label for="ipv4-dhcp">Automatic configuration (DHCP)</label>
+        </div>
+        <div class="radio-option">
+            <input type="radio" id="ipv4-manual" name="ipv4-config">
+            <label for="ipv4-manual">Manual configuration</label>
+        </div>
+    </div>
+    <div class="ip-fields">
+        <div class="field-group">
+            <label for="ipv4-address">IP Address:</label>
+            <input type="text" id="ipv4-address" value="">
+            <span class="separator">/</span>
+            <input type="text" id="ipv4-prefix" value="" class="prefix-input">
+        </div>
+        <div class="field-group">
+            <label for="ipv4-gateway">Gateway:</label>
+            <input type="text" id="ipv4-gateway" value="">
+        </div>
+        <div class="field-group">
+            <label for="ipv4-dns1">DNS 1:</label>
+            <input type="text" id="ipv4-dns1" value="">
+        </div>
+        <div class="field-group">
+            <label for="ipv4-dns2">DNS 2:</label>
+            <input type="text" id="ipv4-dns2">
+        </div> -->
+
+        <!-- Static Routes Section -->
+        <!-- <div class="static-routes">
+            <h6>Static Routes</h6>
+            <div class="route-entry">
+                <div class="route-label">Route 0</div>
+                <div class="route-fields">
+                    <input type="text" placeholder="Destination" class="route-input" id="route0-dest">
+                    <input type="text" placeholder="Gateway" class="route-input" id="route0-gateway">
+                    <input type="number" placeholder="Metric" class="route-input metric" id="route0-metric">
+                </div>
+            </div>
+            <div class="route-entry">
+                <div class="route-label">Route 1</div>
+                <div class="route-fields">
+                    <input type="text" placeholder="Destination" class="route-input" id="route1-dest">
+                    <input type="text" placeholder="Gateway" class="route-input" id="route1-gateway">
+                    <input type="number" placeholder="Metric" class="route-input metric" id="route1-metric">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+        <div class="button-group" style="margin-top: 20px;">
+            <button class="btn" id="clear-network">Clear</button>
+            <button class="btn btn-primary" id="save-network">Save</button>
+        </div>
+    </div>
+</div> -->
+
+
+
+<div class="settings-section">
+    <div class="section-header">
+        <h3><i class="fa-solid fa-lock"></i> SSL webserver certificate for REST API</h3>
+        <i class="fa-solid fa-chevron-down"></i>
+    </div>
+    <div class="section-content">
+        <div class="ssl-info">
+            <!-- Certificate Details -->
+            <div class="cert-details">
+                <div class="info-row">
+                    <label>Certificate issuer name:</label>
+                    <span>-</span>
+                </div>
+                <div class="info-row">
+                    <label>Certificate subject name:</label>
+                    <span>-</span>
+                </div>
+                <div class="info-row">
+                    <label>Certificate effective timestamp:</label>
+                    <span>-</span>
+                </div>
+                <div class="info-row">
+                    <label>Certificate expiry timestamp:</label>
+                    <span>-</span>
+                </div>
+                <div class="info-row">
+                    <label>Certificate blacklisted:</label>
+                    <span>-</span>
+                </div>
+                <div class="info-row">
+                    <label>Certificate self signed:</label>
+                    <span>-</span>
+                </div>
+                <div class="info-row">
+                    <label>Certificate version:</label>
+                    <span>-</span>
+                </div>
+            </div>
+
+            <!-- <button class="btn btn-secondary" onclick="replaceWithDefault()">Replace with default</button> -->
+
+            <!-- Import Section -->
+            <div class="import-section">
+                <h4>Import certificate</h4>
+                <div class="file-input-group">
+                    <label>SSL certificate (.crt):</label>
+                    <div class="file-input-wrapper">
+                        <input type="text" id="cert-file-display" readonly placeholder="Select certificate file" class="file-input">
+                        <input type="file" id="cert-file" accept=".crt,.pem" style="display: none;">
+                        <button class="btn browse-btn" onclick="document.getElementById('cert-file').click()">Browse...</button>
+                    </div>
+                </div>
+                
+                <div class="file-input-group">
+                    <label>SSL key (.key):</label>
+                    <div class="file-input-wrapper">
+                        <input type="text" id="key-file-display" readonly placeholder="Select key file" class="file-input">
+                        <input type="file" id="key-file" accept=".key" style="display: none;">
+                        <button class="btn browse-btn" onclick="document.getElementById('key-file').click()">Browse...</button>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" onclick="importAndUseSSL()">Import and use</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+        <!-- <div class="settings-section">
+            <div class="section-header">
+                <h3>Factory reset</h3>
+                <i class="fa-solid fa-chevron-right"></i>
+            </div>
+        </div>
+
+
+
+        <div class="settings-section">
+            <div class="section-header">
+                <h3>UDP server settings</h3>
+                <i class="fa-solid fa-chevron-right"></i>
+            </div>
+        </div> -->
+
+        <!-- Auto-recover action section -->
+        <div class="settings-section">
+            <div class="section-header">
+                <h3> <i class="fa-solid fa-circle-notch"></i> Auto-recover action</h3>
+                <i class="fa-solid fa-chevron-down"></i>
+            </div>
+            <div class="section-content" style="padding: 20px;">
+                <p style="margin-bottom: 20px; color: #666;">
+                    Performing the action below may help to recover from some unhandled low-level errors in system drivers. An auto-save will be performed before the action if enabled.
+                </p>
+
+                <!-- Toggle switch row -->
+                <div class="auto-recover-row">
+                    <label class="switch">
+                        <input type="checkbox" id="auto-recover-toggle">
+                        <span class="slider round"></span>
+                    </label>
+                    <span id="toggle-status" style="margin-left: 10px; color: #666;">Action disabled</span>
+                </div>
+
+                <!-- Advanced options (hidden by default) -->
+                <div id="advanced-options" style="display: none; margin-top: 20px;">
+                    <div class="schedule-row" style="display: flex; align-items: center; margin-bottom: 20px;">
+                        <span>The device automatically perform the selected action every</span>
+                        <input type="text" id="days-input" value="" style="width: 60px; margin: 0 10px;">
+                        <span>from</span>
+                        <div class="datetime-picker-container" style="position: relative; margin-left: 10px;">
+                            <input type="text" id="time-input" class="flatpickr" 
+                                style="width: 200px; padding-right: 30px;" 
+                                placeholder="Select date & time">
+                            <button type="button" id="clear-datetime" 
+                                    style="position: absolute; right: 5px; top: 50%; transform: translateY(-50%); 
+                                        border: none; background: none; cursor: pointer;">
+                                <i class="fa-solid fa-times"></i>
+                            </button>
+                        </div>
+                        <span>.</span>
+                    </div>
+
+                    <!-- Radio buttons group -->
+                    <div class="radio-group" style="display: flex; gap: 20px; margin-bottom: 20px;">
+                        <label class="radio-container">
+                            <input type="radio" name="recover-action" value="reboot-node">
+                            <span class="radio-label">Reboot Node</span>
+                        </label>
+                        <label class="radio-container">
+                            <input type="radio" name="recover-action" value="reboot-block">
+                            <span class="radio-label">Reboot Block</span>
+                        </label>
+                        <label class="radio-container">
+                            <input type="radio" name="recover-action" value="reboot-both" checked>
+                            <span class="radio-label">Reboot Node and Block</span>
+                        </label>
+                        <label class="radio-container">
+                            <input type="radio" name="recover-action" value="hw-reset">
+                            <span class="radio-label">HW reset</span>
+                        </label>
+                    </div>
+
+                    <!-- Current time display -->
+                    <div style="margin-bottom: 20px; color: #666;">
+                        The current block time is <span id="current-block-time">2024-12-09 02:22:08 UTC</span>.
+                    </div>
+                </div>
+
+                <!-- Action buttons -->
+                <div class="action-buttons" style="display: flex; gap: 10px; margin-top: 20px;">
+                    <button id="save-settings" class="btn">Save settings</button>
+                    <button class="btn btn-primary" onclick="rebootNodeNow()">Reboot Node NOW</button>
+                    <button class="btn btn-primary" onclick="rebootBlockNow()">Reboot Block NOW</button>
+                    <button class="btn btn-primary" onclick="systemRebootNow()">System reboot NOW</button>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- <div class="settings-section">
+            <div class="section-header">
+                <h3>Notification settings</h3>
+                <i class="fa-solid fa-chevron-right"></i>
+            </div>
+        </div>
+
+        <div class="settings-section">
+            <div class="section-header">
+                <h3>Map data - API key</h3>
+                <i class="fa-solid fa-chevron-right"></i>
+            </div>
+        </div> -->
+
+        <div class="settings-section">
+            <div class="section-header">
+                <h3> <i class="fa-solid fa-share-nodes"></i> MQTT</h3>
+                <i class="fa-solid fa-chevron-down"></i>
+            </div>
+
+
+
+            <div class="section-content">
+                <form id="mqtt-config-form">
+                    <div class="form-group">
+                        <label for="mqtt-server"><i class="fa-solid fa-server"></i> Server</label>
+                        <input type="text" id="mqtt-server" placeholder="Enter server address" value="">
+                    </div>
+                    <div class="form-group">
+                        <label for="mqtt-port"><i class="fa-solid fa-screwdriver-wrench"></i> Port</label>
+                        <input type="number" id="mqtt-port" placeholder="Enter port" value="">
+                    </div>
+                    <div class="form-group">
+                        <label for="mqtt-topic"><i class="fa-solid fa-clipboard-list"></i> Topic</label>
+                        <input type="text" id="mqtt-topic" placeholder="Enter topic name" value="">
+                    </div>
+                    <div class="form-group">
+                        <label for="mqtt-keep-alive"><i class="fa-solid fa-heart"></i> Keep Alive</label>
+                        <input type="number" id="mqtt-keep-alive" placeholder="Keep alive in seconds" value="">
+                    </div>
+                    <div class="button-group">
+                        <button type="button" class="save-btn" onclick="saveMQTTConfig()">Save</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+        
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/block_settings.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/StreamConfig.js') }}"></script>
+</body>
+</html>

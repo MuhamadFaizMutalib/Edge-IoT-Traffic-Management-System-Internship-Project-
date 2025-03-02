@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HomePage</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<style>
+    .create-btn:disabled {
+        background-color: #cccccc !important;
+        cursor: not-allowed;
+        opacity: 0.7;
+    }
+    </style>
+<body>
+    <div class="sidebar">
+        <div class="logo">
+            <img src="{{ url_for('static', filename='media/Logo.png') }}" alt="DynaTech" style="height: 50px;">
+        </div>
+        <nav>
+            <ul>
+                <!-- Elements visible only to logged-in users -->
+                {% if session['username'] %}
+                <li onclick="toggleSourceList()"><i class="fa-solid fa-video"></i> Analytics</li>
+                <li id="source-list" style="display: none;">
+                    <ul>
+                        <li onclick="navigateToIndex()"><i class="fa-solid fa-list-ul"></i> Source List</li>
+                    </ul>
+                </li>
+                
+                <li onclick="toggleUserSubmenu()"><i class="fa-solid fa-user"></i> User Management</li>
+                <li id="user-submenu" style="display: none;">
+                    <ul>
+                        <li onclick="navigateToMyAccount()"><i class="fa-solid fa-cog"></i> My Account</li>
+                    </ul>
+                </li>
+                
+                <li><i class="fa-solid fa-bell"></i> Notifications</li>
+    
+                <li onclick="toggleBlockSubmenu()"><i class="fa-solid fa-ban"></i> Block</li>
+                <li id="block-submenu" style="display: none;">
+                    <ul>
+                        <li onclick="navigateToSettings()"><i class="fa-solid fa-cog"></i> Settings</li>
+                        <li onclick="navigateToDiagnostics()"><i class="fa-solid fa-braille"></i> Diagnostics</li>
+                        <!-- <li><i class="fa-solid fa-database"></i> Storage</li> -->
+                    </ul>
+                </li>
+                <!-- <li><i class="fa-solid fa-pager"></i> Interfaces</li>
+                <li><i class="fa-solid fa-chart-bar"></i> Statistics</li> -->
+                <li><i class="fa-solid fa-sync-alt"></i> Updates</li>
+                <div id="updateModal" class="modal" style="display: none;">
+                    <div class="update-modal-content">
+                        <div class="update-header"> 
+                            <h2>
+                                <img src="{{ url_for('static', filename='media/dynalogo.png') }}" alt="Logo" style="height: 40px; vertical-align: middle; margin-right: 10px;">
+                                New Update!
+                            </h2>
+                        </div>
+                        <div class="update-body">
+                            <div class="text-center">
+                                <h3 style="color: rgba(0, 0, 0, 0.829);"><strong>Version 2.9.1</strong></h3>                      
+                                <p class="version">Version Dev (OS Build 21996.1)</p> <p>.....</p>
+                            </div>
+
+                            <p class="license-info">
+                                <!-- <p>
+                                <strong> [1] Virtual Detector Box Enhancement: </strong> <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Now supports 8 coordinates for precise adjustments—create any shape you need! <br>
+                                </p> -->
+                                <p>
+                                <strong> [1] Setup Settings Added: </strong> <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Easily edit stream names and RTSP links. <br>
+                                </p>
+                                <p>
+                                <strong> [2] Bug Fixes: </strong> <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Resolved issues when deleting streams for smoother operation. <br>
+                                </p>
+                                <p>
+                                <strong> [3] Exit Line Crossing:</strong> <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;You can now rename exit lines during configuration. <br>
+                                </p>
+                                <p>
+                                <strong> [4] SSL Certificate Upload:</strong> <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Added under block settings for secure connections. <br>
+                                </p>
+                                <p>
+                                <strong> [5] IP Address Settings:</strong> <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Change IP addresses directly from block settings. <br>
+                                </p>
+                                <p>
+                                <strong> [6] Model Upload Feature:</strong> <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Upload and run new models directly in the stream display.
+                                </p>
+                            </p>
+                            
+                            <p class="terms">
+    
+                                <a href="#" class="terms-link"> <br> The UI was last updated on 28/2/2025.</a> 
+                            </p>
+                
+                        </div>
+                        <div class="update-footer">
+                            <button id="updateOkButton" class="ok-button">OK</button>
+                        </div>
+                    </div>
+                </div>
+                <li onclick="logoutUser()"><i class="fa-solid fa-sign-out-alt"></i> Log out</li>
+                {% endif %}
+            </ul>
+        </nav>
+    
+        <!-- Bottom section with Version and Settings -->
+        <div class="bottom-section">
+            <div class="version-info">
+                <p>Version 2.9.1</p>
+            </div>
+            <ul>
+                <li class="settings"><i class="fa-solid fa-cog"></i> Settings</li>
+            </ul>
+        </div>
+    </div>
+    
+    
+    
+    <div class="main-content">
+        <div class="controls">
+            <label for="show-select">Show:</label>
+            <select id="show-select">
+                <option>All cameras</option>
+                <option>Online</option>
+                <option>Offline</option>
+                <option>Enabled</option>
+                <option>Disabled</option>
+            </select>
+            
+            <span class="camera-count">0 / 0 cameras</span>
+
+            
+            <div class="sort-search-wrapper">
+                <div class="sort-section">
+                    <span class="sort-label">Sort by:</span>
+                    <a href="#" class="sort-option active">ID ▲</a>
+                    <a href="#" class="sort-option">Name</a>
+                </div>
+                
+                <div class="search-wrapper">
+                    <i class="fa fa-search search-icon"></i>
+                    <input type="text" placeholder="Search" class="search-input">
+                </div>
+                
+                <button class="add-source" onclick="openModal()">
+                    <i class="fas fa-plus"></i> Add source
+                </button>
+            </div>
+        </div>
+        
+        <div class="camera-grid"></div>
+
+    </div>
+
+
+    
+    <div id="createAnalyticsModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">×</span>
+            <h2>Create Analytics</h2>
+            <p>Set analytics name and its RTSP stream address</p>
+            <div class="modal-form">
+                <input type="text" id="analyticsName" placeholder="Analytics Name" required>
+                <input type="text" id="rtspStream" placeholder="RTSP Stream URL" required>
+            </div>
+            <div class="modal-buttons">
+                <button class="cancel-btn" onclick="closeModal()" style="color: white; background-color: red;">Cancel</button>
+                <button class="create-btn" onclick="createStream()">Create</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="setupAnalyticsModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeSetupModal()">×</span>
+            <h2>Analytics Setup</h2>
+            <p>Set analytics name and data source</p>
+            <div class="modal-form">
+                <div class="form-group">
+                    <label for="setupName">Name</label>
+                    <input type="text" id="setupName" placeholder="Analytics Name">
+                </div>
+                <div class="form-group">
+                    <label for="setupSource">Source</label>
+                    <input type="text" id="setupSource" placeholder="rtsp://admin:Dyna1234@192.168.35.69:554/stream1">
+                </div>
+            </div>
+            <div class="modal-buttons">
+                <button class="cancel-btn" onclick="closeSetupModal()" style="color: white;">Cancel</button>
+                <button class="create-btn" onclick="saveSetup()">Save</button>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+</body>
+</html>

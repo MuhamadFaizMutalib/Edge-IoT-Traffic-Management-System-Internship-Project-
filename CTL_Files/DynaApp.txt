@@ -1,0 +1,17 @@
+[Unit]
+Description=Python App Service
+After=network.target postgresql.service
+Requires=postgresql.service
+
+[Service]
+Type=simple
+User=dyna
+Group=dyna
+WorkingDirectory=/home/dyna/Desktop/DynaApp
+Environment="PYTHONUNBUFFERED=1"
+ExecStart=/usr/bin/python3 /home/dyna/Desktop/DynaApp/app.py
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

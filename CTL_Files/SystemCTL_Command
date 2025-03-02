@@ -1,0 +1,17 @@
+sudo nano /etc/systemd/system/DynaApp.service
+
+sudo systemctl daemon-reload
+
+sudo systemctl enable DynaApp.service
+
+sudo systemctl start DynaApp.service
+
+sudo systemctl status DynaApp.service
+
+journalctl -u DynaApp.service
+
+GPT LINK = https://chatgpt.com/share/6757a0f3-ab94-800e-8148-795e38154e2a
+
+
+timedatectl
+

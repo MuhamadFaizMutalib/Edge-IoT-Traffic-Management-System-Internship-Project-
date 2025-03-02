@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StreamConfiguration</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/StreamConfig.css') }}">
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo">
+            <img src="{{ url_for('static', filename='media/Logo.png') }}" alt="DynaTech" style="height: 50px;">
+        </div>
+        <nav>
+            <ul>
+                <li onclick="toggleSourceList()"><i class="fa-solid fa-video"></i> Analytics</li>
+                <li id="source-list" style="display: none;">
+                    <ul>
+                        <li onclick="navigateToIndex()"><i class="fa-solid fa-list-ul"></i> Source List</li>
+                    </ul>
+                </li>
+                
+                <li onclick="toggleUserSubmenu()"><i class="fa-solid fa-user"></i> User Management</li>
+                <li id="user-submenu" style="display: none;">
+                    <ul>
+                        <li onclick="navigateToMyAccount()"><i class="fa-solid fa-cog"></i> My Account</li>
+                    </ul>
+                </li>  
+                
+                <li><i class="fa-solid fa-bell"></i> Notifications</li>
+    
+                <li onclick="toggleBlockSubmenu()"><i class="fa-solid fa-ban"></i> Block</li>
+                    <li id="block-submenu" style="display: none;">
+                        <ul>
+                            <li onclick="navigateToSettings()"><i class="fa-solid fa-cog"></i> Settings</li>
+                            <li onclick="navigateToDiagnostics()"><i class="fa-solid fa-braille"></i> Diagnostics</li>
+                            <!-- <li><i class="fa-solid fa-database"></i> Storage</li> -->
+                        </ul>
+                    </li>
+                <!-- <li><i class="fa-solid fa-pager"></i> Interfaces</li>
+                <li><i class="fa-solid fa-chart-bar"></i> Statistics</li> -->
+                <!-- <li><i class="fa-solid fa-sync-alt"></i> Updates</li> -->
+                <li onclick="logoutUser()"><i class="fa-solid fa-sign-out-alt"></i> Log out</li>
+            </ul>
+        </nav>
+    
+        <!-- Bottom section with Version and Settings -->
+        <div class="bottom-section">
+            <div class="version-info">
+                <p>Version 2.9.1</p>
+            </div>
+            <ul>
+                <li class="settings"><i class="fa-solid fa-cog"></i> Settings</li>
+            </ul>
+        </div>
+    </div>
+
+
+    <div class="main-content">
+        <div class="stream-container">
+            <!-- Main Tab -->
+            <div id="mainTab" class="tab-pane active">
+                <div class="video-container">
+                    <img src="{{ stream_url }}" id="streamImage" alt="Stream" style="display: none;">
+                </div>
+                <div class="controls-container">
+                    <button id="virtualLoopBtn" onclick="toggleVirtualLoop()" class="control-btn">
+                        <i class="fa-solid fa-gear"></i>
+                        Settings
+                    </button>
+                    <button id="enableNvdsAnalyticBtn" onclick="enableNvdsAnalytic()" class="control-btn">
+                        <i class="fa-solid fa-play"></i>
+                        Nvds-Analytic
+                    </button>
+                    <button id="ChangeModelBtn" onclick="ChangeModel()" class="control-btn">
+                        <i class="fa-solid fa-plus"></i>
+                        Change-Model
+                    </button>
+                </div>
+                <input type="file" id="engineFileInput" accept=".engine" style="display: none;">
+            </div>
+
+            <!-- Virtual Detector Tab -->
+            <div id="virtualLoopTab" class="tab-pane" style="display: none;">
+                <div class="virtual-loop-container">
+                    <div class="video-container">
+                        <img src="/video_feed/{{ stream_id }}" id="virtualLoopStream" alt="Stream">
+                        <canvas id="virtualLoopCanvas" class="overlay-canvas"></canvas>
+                    </div>
+            
+
+
+                    <div class="settings-panel">
+                        <div class="coordinates-display">
+                            <!-- <h3>Coordinates</h3> -->
+                            <pre id="virtualLoopCoordinates" style="margin-top: 5px; display: none;"></pre>
+
+                        </div>
+            
+                        <div class="config-inputs">
+                            <div class="input-group" style="margin-top: 10px; display: none;">
+                                <label for="streamIdDisplay">Stream ID:</label>
+                                <span id="streamIdDisplay">{{ stream_id }}</span>
+                            </div>
+                        
+                            <div class="input-group" style="margin-top: 10px; display: none;">
+                                <label for="streamNumberDisplay">Stream Number:</label>
+                                <span id="streamNumberDisplay">{{ stream_number }}</span>
+                            </div>
+                        
+                            <div class="input-group" style="margin-top: 5px; display: none;">
+                                <label for="roiNumber">ROI Number:</label>
+                                <input type="number" id="roiNumber" min="1" value="1" disabled>
+                            </div>
+
+                            <div style="margin-bottom: 15px;">
+                                <button id="addVirtualLoopBtn" onclick="addVirtualLoop()" class="control-btn">
+                                    <i class="fa-solid fa-plus"></i> Add Virtual Detector
+                                </button>
+
+                                <button id="addLineCrossingBtn" onclick="addLineCrossing()" class="control-btn" style="margin-top: 5px;">
+                                    <i class="fa-solid fa-plus"></i>
+                                    Add Line-Crossing
+                                </button>
+                            </div>
+                        
+                            <div class="button-group" style="display: flex; gap: 10px;">
+                                <button id="SaveConfiguration" class="control-btn">
+                                    <i class="fa-solid fa-save"></i>
+                                    Apply
+                                </button>
+                                
+                                
+                                <button id="cancelVirtualLoopBtn" onclick="cancelVirtualLoop()" class="control-btn">
+                                    <i class="fa-solid fa-times"></i>
+                                    Cancel
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/block_settings.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/StreamConfig.js') }}"></script>
+</body>
+</html>

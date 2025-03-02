@@ -1,0 +1,52 @@
+    'host': 'localhost',
+    'user': 'dyna_user',
+    'password': 'Dyna1234',
+    'dbname': 'dyna',
+    'port': '5432'
+    
+    
+sudo -i -u postgres   = ENter PortgressTerminal
+psql
+
+    
+To stop PostgreSQL: sudo systemctl stop postgresql
+To start PostgreSQL: sudo systemctl start postgresql
+To restart PostgreSQL: sudo systemctl restart postgresql
+
+
+
+
+
+################## CReate Server ########################
+
+sudo -i -u postgres
+psql
+CREATE DATABASE dyna;
+CREATE USER dyna_user WITH PASSWORD 'Dyna1234';
+GRANT ALL PRIVILEGES ON DATABASE dyna TO dyna_user;
+\q
+psql -h localhost -U dyna_user -d dyna -p 5432
+Then create tables as usual
+
+#########################################################
+
+
+
+
+
+################## View Tables ##########################
+\dt
+\d table_name
+\q = to quit
+
+#########################################################
+
+
+
+sudo -i -u postgres
+psql
+REVOKE ALL PRIVILEGES ON DATABASE dyna FROM dyna_user;
+DROP DATABASE dyna;
+DROP ROLE dyna_user;
+
+

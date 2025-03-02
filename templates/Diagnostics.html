@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/Diagnostics.css') }}">
+    <title>Block Diagnostics</title>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo">
+            <img src="{{ url_for('static', filename='media/Logo.png') }}" alt="DynaTech" style="height: 50px;">
+        </div>
+        <nav>
+            <ul>
+                <!-- Elements visible only to logged-in users -->
+                {% if session['username'] %}
+                <li onclick="toggleSourceList()"><i class="fa-solid fa-video"></i> Analytics</li>
+                <li id="source-list" style="display: none;">
+                    <ul>
+                        <li onclick="navigateToIndex()"><i class="fa-solid fa-list-ul"></i> Source List</li>
+                    </ul>
+                </li>
+                
+                <li onclick="toggleUserSubmenu()"><i class="fa-solid fa-user"></i> User Management</li>
+                <li id="user-submenu" style="display: none;">
+                    <ul>
+                        <li onclick="navigateToMyAccount()"><i class="fa-solid fa-cog"></i> My Account</li>
+                    </ul>
+                </li>
+                
+                <li><i class="fa-solid fa-bell"></i> Notifications</li>
+    
+                <li onclick="toggleBlockSubmenu()"><i class="fa-solid fa-ban"></i> Block</li>
+                <li id="block-submenu" style="display: none;">
+                    <ul>
+                        <li onclick="navigateToSettings()"><i class="fa-solid fa-cog"></i> Settings</li>
+                        <li onclick="navigateToDiagnostics()"><i class="fa-solid fa-braille"></i> Diagnostics</li>
+                        <!-- <li><i class="fa-solid fa-database"></i> Storage</li> -->
+                    </ul>
+                </li>
+                <!-- <li><i class="fa-solid fa-pager"></i> Interfaces</li>
+                <li><i class="fa-solid fa-chart-bar"></i> Statistics</li> -->
+                <!-- <li><i class="fa-solid fa-sync-alt"></i> Updates</li> -->
+                <li onclick="logoutUser()"><i class="fa-solid fa-sign-out-alt"></i> Log out</li>
+                {% endif %}
+            </ul>
+        </nav>
+    
+        <!-- Bottom section with Version and Settings -->
+        <div class="bottom-section">
+            <div class="version-info">
+                <p>Version 2.9.1</p>
+            </div>
+            <ul>
+                <li class="settings"><i class="fa-solid fa-cog"></i> Settings</li>
+            </ul>
+        </div>
+    </div>
+
+
+    <div class="container">
+        <h1><i class="fa-solid fa-cubes"></i> Block Diagnostics</h1>
+        
+        <section class="block-status">
+            <h2>Block Status:</h2>
+            <div class="grid">
+                <div class="label">Type:</div>
+                <div class="value" id="type">Embedded micro</div>
+                
+                <div class="label">Version:</div>
+                <div class="value" id="version">-</div>
+                
+                <div class="label">Serial number:</div>
+                <div class="value" id="serial">-</div>
+                
+                <div class="label">Current block time:</div>
+                <div class="value" id="blockTime">-</div>
+                
+                <div class="label">Online since:</div>
+                <div class="value" id="onlineSince">-</div>
+                
+                <div class="label">Uptime:</div>
+                <div class="value" id="uptime">-</div>
+            </div>
+        </section>
+
+        <section class="system-performance">
+            <h2>System Performance Status:</h2>
+            <div class="grid">
+                <!-- <div class="label">Uptime:</div>
+                <div class="value" id="systemUptime">-</div> -->
+                
+                <div class="label">Average CPU utilization:</div>
+                <div class="value" id="avgCpuUtil">-</div>
+                
+                <div class="label">CPU utilization:</div>
+                <div class="value" id="cpuUtil">-</div>
+                
+                <div class="label">CPU temperature:</div>
+                <div class="value" id="cpuTemp">-</div>
+                
+                <div class="label">CPU name:</div>
+                <div class="value" id="cpuName">-</div>
+                
+                <!-- <div class="label">GPU fan speed:</div>
+                <div class="value" id="gpuFanSpeed">-</div> -->
+                
+                <div class="label">GPU temperature:</div>
+                <div class="value" id="gpuTemp">-</div>
+                
+                <div class="label">GPU power usage:</div>
+                <div class="value" id="gpuPower">-</div>
+                
+                <div class="label">GPU utilization:</div>
+                <div class="value" id="gpuUtil">-</div>
+                
+                <div class="label">GPU memory utilization:</div>
+                <div class="value" id="gpuMemUtil">-</div>
+                
+                <div class="label">GPU encoder utilization:</div>
+                <div class="value" id="gpuEncoderUtil">-</div>
+                
+                <div class="label">GPU decoder utilization:</div>
+                <div class="value" id="gpuDecoderUtil">-</div>
+                
+                <div class="label">GPU graphics clock speed:</div>
+                <div class="value" id="gpuClock">-</div>
+                
+                <!-- <div class="label">GPU streaming multiprocessor clock spd:</div>
+                <div class="value" id="gpuSmClock">-</div>
+                
+                <div class="label">GPU memory clock speed:</div>
+                <div class="value" id="gpuMemClock">-</div>
+                
+                <div class="label">GPU video clock speed:</div>
+                <div class="value" id="gpuVideoClock">-</div> -->
+                
+                <div class="label">GPU name:</div>
+                <div class="value" id="gpuName">-</div>
+                
+                <!-- <div class="label">GPU driver version:</div>
+                <div class="value" id="gpuDriver">-</div> -->
+                
+                <div class="label">Memory used:</div>
+                <div class="value" id="memUsed">-</div>
+                
+                <div class="label">Memory total:</div>
+                <div class="value" id="memTotal">-</div>
+                
+                <div class="label">Swap used:</div>
+                <div class="value" id="swapUsed">-</div>
+                
+                <div class="label">Swap total:</div>
+                <div class="value" id="swapTotal">-</div>
+            </div>
+        </section>
+
+        <section class="mount-points">
+            <h2>S.M.A.R.T Disk Status:</h2>
+            <div id="smart-disk-status" class="disk-status-container">
+            </div>
+        </section>
+
+
+
+        <section class="network-status">
+            <h2>System Network Status:</h2>
+            <div class="grid">
+                <div class="label">Internet access:</div>
+                <div class="value" id="internetAccess">-</div>
+                
+                <div class="label">Internet delay:</div>
+                <div class="value" id="internetDelay">-</div>
+                
+                <div class="label">DNS access:</div>
+                <div class="value" id="dnsAccess">-</div>
+                
+                <div class="label">Local VPN access:</div>
+                <div class="value" id="localVpn">-</div>
+                
+                <div class="label">Server VPN access:</div>
+                <div class="value" id="serverVpn">-</div>
+                
+                <div class="label">Server VPN port open:</div>
+                <div class="value" id="serverVpnPort">-</div>
+            </div>
+
+            <table class="network-interfaces">
+                <thead>
+                    <tr>
+                        <th>Interface name</th>
+                        <th>IP address</th>
+                        <th>Receive</th>
+                        <th>Total received</th>
+                        <th>Transmit</th>
+                        <th>Total transmitted</th>
+                    </tr>
+                </thead>
+                <tbody id="networkInterfacesTable">
+                    <!-- Network interfaces will be inserted here -->
+                </tbody>
+            </table>
+        </section>
+    </div>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/Diagnostics.js') }}"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,14 @@
+[Unit]
+Description=DeepStream MJPEG Python Service
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/python3 /opt/nvidia/deepstream/deepstream-7.0/sources/apps/s>
+WorkingDirectory=/opt/nvidia/deepstream/deepstream-7.0/sources/apps/sample_apps>
+Restart=always
+User=dyna
+Group=dyna
+Environment="PYTHONUNBUFFERED=1"
+
+[Install]
+WantedBy=multi-user.target
